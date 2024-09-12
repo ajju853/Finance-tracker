@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumSpend: Future Finance</title>
+    <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <div class="mode-toggle" @click="toggleDarkMode">
+            <i :class="isDarkMode ? 'fas fa-sun' : 'fas fa-moon'"></i>
+        </div>
+        <h1 class="floating"><i class="fas fa-wallet"></i> QuantumSpend</h1>
+        
+        <div class="card">
+            <h2><i class="fas fa-plus-circle"></i> Add Expense</h2>
+            <input v-model="newExpense.description" placeholder="Description">
+            <input v-model.number="newExpense.amount" type="number" placeholder="Amount">
+            <select v-model="newExpense.category">
+                <option value="">Select Category</option>
+                <option v-for="category in categories" :value="category">{{ category }}</option>
+            </select>
+            <button @click="addExpense"><i class="fas fa-bolt"></i> Add</button>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-list"></i> Expenses</h2>
+            <div class="expense-list">
+                <div v-for="(expense, index) in expenses" :key="index" class="expense-item">
+                    <span>
+                        <i :class="getCategoryIcon(expense.category)"></i>
+                        {{ expense.description }} ({{ expense.category }})
+                    </span>
+                    <span>
+                        ${{ expense.amount.toFixed(2) }}
+                        <button @click="deleteExpense(index)"><i class="fas fa-trash"></i></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-chart-pie"></i> Expense Analysis</h2>
+            <div class="chart-container">
+                <canvas ref="expenseChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-file-export"></i> Export Reports</h2>
+            <div class="export-buttons">
+                <button @click="exportPDF"><i class="fas fa-file-pdf"></i> Export PDF</button>
+                <button @click="exportCSV"><i class="fas fa-file-csv"></i> Export CSV</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
